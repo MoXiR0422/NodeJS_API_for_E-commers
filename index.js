@@ -9,7 +9,7 @@ app.use(express.urlencoded({ extended: true }))
 app.set("view engine","ejs")
 
 // // connect to mongoose
-mongoose.connect("mongodb+srv://moxirbek:dilshodbek0422@cluster0.fp1t4.mongodb.net/?retryWrites=true&w=majority")
+mongoose.connect("mongodb://localhost:27017")
 .then(()=>{
     console.log("connect to mongoose");
 })

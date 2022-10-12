@@ -9,6 +9,10 @@ router.get("/",async(req,res)=>{
 })
 // register
 router.post("/register",async(req,res)=>{
+  const email = await Foydalanuvchilar.findOne({email:req.body.email})
+  if(email){
+    res.json("this account is already in use")
+  }else{
     try{
         const newUser=new Foydalanuvchilar({
             username:req.body.username,
@@ -22,6 +26,7 @@ router.post("/register",async(req,res)=>{
     catch(err){
         res.status(500).json(err)
     }
+  }
 })
 
 // login

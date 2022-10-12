@@ -20,10 +20,19 @@ router.get("/Male",async(req,res)=>{
     res.status(200).json(Products)
 })
 
-router.post("/addProduct", upload.single("img"), async (req, res) => {
-    const result = await cloudinary.uploader.upload(req.file.path);
+router.post("/addProduct", upload.array("img"), async (req, res) => {
+    const size=req.body.size;
+    var sizes = size.split(",");
     const obekt=[]
-    obekt.push(result.secure_url)
+    for(var i=0;i<7;i++){
+        if(req.files[i]){
+            const result = await cloudinary.uploader.upload(req.files[i].path);
+            obekt.push(result.secure_url)
+        }
+        else{
+            obekt.push()
+        }
+    }
     const deta=new Date().toString().replace(/T/, ' ').replace(/\..+/, '')
     const gender=req.body.gender
     if(gender === "mail"){
@@ -32,7 +41,7 @@ router.post("/addProduct", upload.single("img"), async (req, res) => {
             desc:req.body.desc,
             img:obekt,
             categories:req.body.categories,
-            size:req.body.size,
+            size:sizes,
             color:req.body.color,
             price:req.body.price,
             data:deta
@@ -49,7 +58,7 @@ router.post("/addProduct", upload.single("img"), async (req, res) => {
             desc:req.body.desc,
             img:obekt,
             categories:req.body.categories,
-            size:req.body.size,
+            size:sizes,
             color:req.body.color,
             price:req.body.price,
             data:deta
@@ -58,12 +67,14 @@ router.post("/addProduct", upload.single("img"), async (req, res) => {
             const savedProduct = await newProduct.save();
             res.json(newProduct).status(200).end();
         } catch (err){
+            
             res.status(500).json(err).end();
         }
     }else{
         res.json("genderni belgilash shart")
     }
 })
+
 
 // $set ni qoshish kerak
 router.put("/:id",async(req,res)=>{
