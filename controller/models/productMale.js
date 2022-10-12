@@ -6,7 +6,10 @@ const Schema = new mongoose.Schema(
     desc: { type: String },
     img: { type: Array },
     categories: { type:Array },
-    size: { type: Array },
+    sizes:[{
+      size:{type:Array},
+      limit:{type:Array}
+    }],
     color: { type: Array },
     price: { type: Number},
     data:{type:String}

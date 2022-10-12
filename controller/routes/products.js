@@ -21,8 +21,10 @@ router.get("/Male",async(req,res)=>{
 })
 
 router.post("/addProduct", upload.array("img"), async (req, res) => {
-    const size=req.body.size;
+    const size=req.body.sizes[0].size;
     var sizes = size.split(",");
+    const limit=req.body.sizes[0].limit;
+    var limits = limit.split(",");
     const obekt=[]
     for(var i=0;i<7;i++){
         if(req.files[i]){
@@ -41,13 +43,16 @@ router.post("/addProduct", upload.array("img"), async (req, res) => {
             desc:req.body.desc,
             img:obekt,
             categories:req.body.categories,
-            size:sizes,
+            sizes:[{
+                size:sizes,
+                limit:limits,
+            }],
             color:req.body.color,
             price:req.body.price,
             data:deta
         });
         try {
-            const savedProduct = await newProduct.save();
+            await newProduct.save();
             res.json(newProduct).status(200).end();
         } catch (err){
            res.status(500).json(err).end();
